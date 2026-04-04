@@ -1,5 +1,0 @@
-- Mern uses model view controller (architecture)
--> model - db models , views -> endpoints , routes , controller -> logic i.e code or fucntions used by routes , utils/helper -> snippets of code used by controllers
-- patch is to update part of the resource , whereas put is to update the entire resource
-- package.json - tells us what we can have , whereas package-lock.json - tells us what we have 
-like ^4.2 ( any minor versions of 4.2)_>package.json , in package-lock.json->(4.2.3 - exact minor version ) , handled by npm
