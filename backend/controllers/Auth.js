@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const Register = async (req,res)=>{
-    console.log(req.body);
     const {firstname,lastname,email,password} = req.body;
     if(!(firstname && lastname && email && password)){
         return res.status(400).send({message:"Please enter all four values"});
@@ -13,20 +12,17 @@ export const Register = async (req,res)=>{
         return res.status(400).send({message:"User already exists"});
     }
     const hashedPassword = bcrypt.hashSync(password,10);
-    //creating the jwt token
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const token = jwt.sign({name:firstname,email}, jwtSecretKey);
-    // sending the jwt token in the response
     const newUser = new User({ 
         firstname,
         lastname,
         email,
-        password:hashedPassword
+        password:hashedPassword,
         });
     await newUser.save();
+    
     const userObj = newUser.toObject();
-    userObj.token = token;
     userObj.password = null;
+
     return res.status(200).json({
         message : "User successfully created",
         user:userObj
@@ -47,11 +43,17 @@ export const Login = async (req,res)=>{
     }
     else{
         const user = existUseremail.toObject();
-        if(bcrypt.compare(req.body.password,user.password)){
+        if(await bcrypt.compare(req.body.password,user.password)){
             const jwtSecretKey = process.env.JWT_SECRET_KEY;
-            const token = jwt.sign({name:user.firstname,email:user.email}, jwtSecretKey);
+            const token = jwt.sign({email:user.email,role:user.role}, jwtSecretKey);
+            console.log(req);
             user.password= null;
-            user.token = token;
+              res.cookie('token', token, {
+                httpOnly: true,   
+                secure: false,     
+                sameSite: 'lax', 
+                maxAge: 24 * 60 * 60 * 1000 
+            });
             return res.status(200).json({
                 message:"user logged in successfully",
                 user
