@@ -1,4 +1,4 @@
-import {S3Client , PutObjectCommand,DeleteObjectCommand} from "@aws-sdk/client-s3";
+import {S3Client , PutObjectCommand,DeleteObjectCommand,GetObjectCommand} from "@aws-sdk/client-s3";
 
 
 const uploadToS3 = async (file,id) => {
@@ -35,6 +35,19 @@ try {
 } catch (err) {
   console.error("Error", err);
 }
+}
+
+export const getFromS3 = async (file,id)=>{
+  try{
+  const client = new S3Client({region:"ap-south-1"});
+  const inputFile = await client.send(new GetObjectCommand({
+    Bucket:"probleminputfiles",
+    Key: `${id}`+"/"+file,
+  }))
+  return inputFile}
+  catch(error){
+    console.log("error in s3 get operations",error);
+  }
 }
 
 export default uploadToS3;

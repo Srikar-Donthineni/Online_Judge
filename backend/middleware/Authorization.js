@@ -11,7 +11,6 @@ const authorize = (allowedRole)=>{
             res.status(401).send("unauthorized user");
         }}
         catch(error){
-            console.log("error in middleware",error)
             res.status(400).send("unauhtorized user");
         }
     }
