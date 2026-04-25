@@ -1,0 +1,36 @@
+.pcard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pcard-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pcard-btn {
+  background: none;
+  border: 0.5px solid transparent;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.pcard-btn-edit:hover {
+  background: #EEEDFE;
+  border-color: #AFA9EC;
+}
+
+.pcard-btn-delete:hover {
+  background: #FCEBEB;
+  border-color: #F09595;
+  color: #A32D2D;
+}

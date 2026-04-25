@@ -2,8 +2,6 @@ import problemModel from "../models/Problem.js";
 import uploadToS3,{deleteFromS3} from "../utils/s3Operations.js";
 
 export const problemCreate = async (req,res)=>{
-    console.log(req.body);
-    console.log(req.files)
     try {
       const prob = new problemModel({
         title : req.body.title,

@@ -22,6 +22,53 @@ const getOutput = (language,code,input)=>{
       process.stdin.write(input);
       process.stdin.end();
     }
+    if(language == "cpp"){
+      const fileName = `./temp/${id}.cpp`;
+      fs.writeFileSync(fileName, code);
+
+      const process = exec(`g++ ${fileName} -o main && main`, (error, stdout, stderr) => {
+        try { fs.unlinkSync(fileName); } catch (e) {}
+
+        if (error) return reject(error.message); 
+        if (stderr) return reject(stderr);         
+        resolve(stdout);                           
+      });
+
+      process.stdin.write(input);
+      process.stdin.end();
+    }
+    if(language == "javascript"){
+      const fileName = `./temp/${id}.js`;
+      
+      fs.writeFileSync(fileName, code);
+      const process = exec(`node ${fileName}`, (error, stdout, stderr) => {
+        try { fs.unlinkSync(fileName); } catch (e) {}
+
+        if (error) return reject(error.message); 
+        if (stderr) return reject(stderr);         
+        resolve(stdout);                           
+      });
+
+      process.stdin.write(input);
+      process.stdin.end();
+    }
+    if(language == "java"){
+      const fileName = `./temp/${id}.java`;
+      
+      fs.writeFileSync(fileName, code);
+      const process = exec(`javac ${fileName} && java -cp ./temp Main `, (error, stdout, stderr) => {
+        try { fs.unlinkSync(fileName);
+            fs.unlinkSync("./temp/Main.class")
+         } catch (e) {}
+
+        if (error) return reject(error.message); 
+        if (stderr) return reject(stderr);         
+        resolve(stdout);                           
+      });
+
+      process.stdin.write(input);
+      process.stdin.end();
+    }
 })}
 
 
@@ -48,8 +95,6 @@ export const submitCode = async (req,res)=>{
   const inputContent = await inputFile.Body.transformToString();
   const outputContent = await outputFile.Body.transformToString();
   const output = await getOutput(language,code,inputContent)
-  console.log("output",output)
-  console.log("output:content",outputContent)
   if(output == outputContent){
     res.status(200).send({"result":"accepted"})
   }

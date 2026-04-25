@@ -1,0 +1,363 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap');
+
+/* ── Variables ── */
+:root {
+  --bg:          #0c0d11;
+  --panel-l:     #111318;
+  --panel-r:     #0e0f14;
+  --surface:     #16181f;
+  --surface-2:   #1c1e28;
+  --border:      #23263a;
+  --accent:      #e8c468;
+  --accent-dim:  #6b5a2a;
+  --green:       #4ade80;
+  --red:         #f87171;
+  --blue:        #60a5fa;
+  --text:        #dde1f0;
+  --text-muted:  #5a5f7a;
+  --text-dim:    #8b90a8;
+  --radius:      8px;
+  --font-serif:  'Fraunces', Georgia, serif;
+  --font-mono:   'JetBrains Mono', monospace;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Full page layout ── */
+.ce-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+
+/* ════════════════════════════
+   LEFT PANEL — Problem
+════════════════════════════ */
+.ce-problem-panel {
+  width: 38%;
+  min-width: 300px;
+  max-width: 480px;
+  background: var(--panel-l);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.ce-problem-panel::-webkit-scrollbar { width: 4px; }
+.ce-problem-panel::-webkit-scrollbar-track { background: transparent; }
+.ce-problem-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.ce-problem-inner {
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Problem title */
+.ce-problem-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.ce-problem-number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  background: rgba(232, 196, 104, 0.1);
+  border: 1px solid rgba(232, 196, 104, 0.2);
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.ce-problem-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+/* Divider */
+.ce-divider {
+  height: 1px;
+  background: var(--border);
+}
+
+/* Sections */
+.ce-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ce-section-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ce-label-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.input-dot  { background: var(--blue); }
+.output-dot { background: var(--green); }
+
+.ce-problem-statement {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text-dim);
+  line-height: 1.75;
+}
+
+/* Sample boxes */
+.ce-sample-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 12px 14px;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+  cursor: default;
+}
+
+/* ════════════════════════════
+   RIGHT PANEL — Editor
+════════════════════════════ */
+.ce-editor-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-r);
+  overflow: hidden;
+}
+
+/* Editor header */
+.ce-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ce-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.dot.red    { background: #ff5f57; }
+.dot.yellow { background: #febc2e; }
+.dot.green  { background: #28c840; }
+
+.ce-editor-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-left: 8px;
+}
+
+.ce-lang-select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.ce-lang-select:hover,
+.ce-lang-select:focus { border-color: var(--accent); }
+
+/* Monaco wrapper — takes remaining vertical space */
+.ce-monaco-wrap {
+  flex: 1;
+  min-height: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── IO Row ── */
+.ce-io-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ce-io-box {
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ce-io-box:first-child {
+  border-right: 1px solid var(--border);
+}
+
+.ce-io-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ce-io-arrow {
+  font-size: 8px;
+  color: var(--accent);
+}
+
+.ce-io-textarea {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 10px 12px;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+}
+
+.ce-io-textarea::placeholder { color: var(--text-muted); }
+.ce-io-textarea:focus         { border-color: var(--accent); }
+
+.ce-output        { background: #0b0c10; cursor: default; }
+.ce-output-error  { border-color: var(--red) !important; color: var(--red); }
+
+/* ── Badges ── */
+.ce-badge {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  letter-spacing: 0.05em;
+}
+.ce-badge.success { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+.ce-badge.error   { background: rgba(248,113,113,0.1); color: var(--red);   border: 1px solid rgba(248,113,113,0.25); }
+
+/* ── Action Row ── */
+.ce-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.ce-verdict-area {
+  min-width: 140px;
+}
+
+.ce-verdict {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 6px;
+}
+.ce-verdict.accepted { background: rgba(74,222,128,0.1);  color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+.ce-verdict.wrong    { background: rgba(248,113,113,0.1); color: var(--red);   border: 1px solid rgba(248,113,113,0.2); }
+
+.ce-btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.ce-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ce-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.ce-btn.run {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.ce-btn.run:hover:not(:disabled) {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.ce-btn.submit {
+  background: var(--accent);
+  color: #0c0d11;
+}
+.ce-btn.submit:hover:not(:disabled) {
+  background: #f0d080;
+  box-shadow: 0 0 18px rgba(232,196,104,0.35);
+  transform: translateY(-1px);
+}
+
+/* ── Spinner ── */
+.ce-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-top-color: #0c0d11;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .ce-page { flex-direction: column; height: auto; overflow: auto; }
+  .ce-problem-panel { width: 100%; max-width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+  .ce-monaco-wrap { height: 300px; flex: none; }
+  .ce-io-row { flex-direction: column; }
+  .ce-io-box:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+}

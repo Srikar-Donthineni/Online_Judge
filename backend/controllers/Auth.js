@@ -46,7 +46,6 @@ export const Login = async (req,res)=>{
         if(await bcrypt.compare(req.body.password,user.password)){
             const jwtSecretKey = process.env.JWT_SECRET_KEY;
             const token = jwt.sign({email:user.email,role:user.role}, jwtSecretKey);
-            console.log(req);
             user.password= null;
               res.cookie('token', token, {
                 httpOnly: true,   

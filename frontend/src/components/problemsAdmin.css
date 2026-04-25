@@ -1,0 +1,15 @@
+.cn-create-btn {
+  background: #7F77DD;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+}
+
+.cn-create-btn:hover {
+  background: #534AB7;
+}
