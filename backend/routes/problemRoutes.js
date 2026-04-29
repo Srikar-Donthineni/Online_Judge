@@ -7,10 +7,10 @@ const problemRouter = express.Router();
 problemRouter.post("/",authorize(['admin']),uploadProblem.fields(
     [{name: "inputFile"},{name:"outputFile"}]),
     problemCreate);
-problemRouter.get("/:id",authorize(['user','admin']),problemGet);
+problemRouter.get("/:id",problemGet);
 problemRouter.delete("/:id",authorize(['admin']),problemDelete);
 problemRouter.put("/:id",authorize(['admin']),uploadProblem.fields(
     [{name: "inputFile"},{name:"outputFile"}]),problemPut);
-problemRouter.get("/",authorize(['admin','user']),problemGetAll);
+problemRouter.get("/",problemGetAll);
 
 export default problemRouter;

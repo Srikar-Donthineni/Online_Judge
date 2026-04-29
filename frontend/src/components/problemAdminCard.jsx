@@ -19,41 +19,47 @@ const ProblemCard = ({ problem, onClick, onDelete, onEdit }) => {
         />
       )}
 
-      <div className="pcard-item" onClick={() => onClick(problem._id)}>
-        <div className="pcard-header">
-          <p className="pcard-title">{problem.title}</p>
-          <div className="pcard-actions">
+      <div className="acard-item" onClick={() => onClick(problem._id)}>
+        {/* Top accent bar */}
+        <div className="acard-accent-bar" />
+
+        <div className="acard-header">
+          <div className="acard-header-left">
+            <span className="acard-index-dot" />
+            <p className="acard-title">{problem.title}</p>
+          </div>
+          <div className="acard-actions">
             <button
-              className="pcard-btn pcard-btn-edit"
+              className="acard-btn acard-btn-edit"
               onClick={(e) => {
                 e.stopPropagation();
                 onEdit(problem);
               }}
               title="Edit"
             >
-              ✏️
+              <span className="acard-btn-icon">✎</span>
             </button>
             <button
-              className="pcard-btn pcard-btn-delete"
+              className="acard-btn acard-btn-delete"
               onClick={(e) => {
                 e.stopPropagation();
-                setShowModal(true); // show modal instead of calling onDelete directly
+                setShowModal(true);
               }}
               title="Delete"
             >
-              ✕
+              <span className="acard-btn-icon">✕</span>
             </button>
           </div>
         </div>
 
-        <hr className="pcard-divider" />
+        <div className="acard-divider" />
 
-        <p className={`pcard-statement ${expanded ? "pcard-expanded" : ""}`}>
+        <p className={`acard-statement ${expanded ? "acard-statement--expanded" : ""}`}>
           {problem.problemStatement}
         </p>
 
         <button
-          className="pcard-toggle"
+          className="acard-toggle"
           onClick={(e) => {
             e.stopPropagation();
             setExpanded((prev) => !prev);

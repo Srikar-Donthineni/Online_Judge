@@ -1,28 +1,28 @@
 import { useState } from "react";
-import "./ProblemCard.css";
+import "./problemCard.css";
 
 const ProblemCard = ({ problem, onClick }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="pcard-item" onClick={() => onClick(problem)}>
+    <div className="ucard-item" onClick={() => onClick(problem)}>
 
       {/* Left: Title */}
-      <div className="pcard-left">
-        <span className="pcard-tag">Problem</span>
-        <h2 className="pcard-title">{problem.title}</h2>
+      <div className="ucard-left">
+        <span className="ucard-tag">Problem</span>
+        <h2 className="ucard-title">{problem.title}</h2>
       </div>
 
-      <div className="pcard-divider" />
+      <div className="ucard-divider" />
 
       {/* Right: Statement + Footer */}
-      <div className="pcard-right">
-        <p className={`pcard-statement ${expanded ? "pcard-expanded" : ""}`}>
+      <div className="ucard-right">
+        <p className={`ucard-statement ${expanded ? "ucard-statement--expanded" : ""}`}>
           {problem.problemStatement}
         </p>
-        <div className="pcard-footer">
+        <div className="ucard-footer">
           <button
-            className="pcard-toggle"
+            className="ucard-toggle"
             onClick={(e) => {
               e.stopPropagation();
               setExpanded((prev) => !prev);
@@ -30,7 +30,7 @@ const ProblemCard = ({ problem, onClick }) => {
           >
             {expanded ? "Show less ↑" : "Show more ↓"}
           </button>
-          <span className="pcard-solve">Solve →</span>
+          <span className="ucard-solve">Solve →</span>
         </div>
       </div>
 

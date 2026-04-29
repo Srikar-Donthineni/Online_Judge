@@ -2,103 +2,35 @@ import {exec} from "child_process";
 import fs from "fs";
 import {v4 as uuidv4} from "uuid";
 import { getFromS3 } from "../utils/s3Operations.js";
-
-const getOutput = (language,code,input)=>{
-    return new Promise((resolve, reject) => {
-    const id = uuidv4();
-
-    if (language === "python") {
-      const fileName = `./temp/${id}.py`;
-      fs.writeFileSync(fileName, code);
-
-      const process = exec(`python ${fileName}`, (error, stdout, stderr) => {
-        try { fs.unlinkSync(fileName); } catch (e) {}
-
-        if (error) return reject(error.message); 
-        if (stderr) return reject(stderr);         
-        resolve(stdout);                           
-      });
-
-      process.stdin.write(input);
-      process.stdin.end();
-    }
-    if(language == "cpp"){
-      const fileName = `./temp/${id}.cpp`;
-      fs.writeFileSync(fileName, code);
-
-      const process = exec(`g++ ${fileName} -o main && main`, (error, stdout, stderr) => {
-        try { fs.unlinkSync(fileName); } catch (e) {}
-
-        if (error) return reject(error.message); 
-        if (stderr) return reject(stderr);         
-        resolve(stdout);                           
-      });
-
-      process.stdin.write(input);
-      process.stdin.end();
-    }
-    if(language == "javascript"){
-      const fileName = `./temp/${id}.js`;
-      
-      fs.writeFileSync(fileName, code);
-      const process = exec(`node ${fileName}`, (error, stdout, stderr) => {
-        try { fs.unlinkSync(fileName); } catch (e) {}
-
-        if (error) return reject(error.message); 
-        if (stderr) return reject(stderr);         
-        resolve(stdout);                           
-      });
-
-      process.stdin.write(input);
-      process.stdin.end();
-    }
-    if(language == "java"){
-      const fileName = `./temp/${id}.java`;
-      
-      fs.writeFileSync(fileName, code);
-      const process = exec(`javac ${fileName} && java -cp ./temp Main `, (error, stdout, stderr) => {
-        try { fs.unlinkSync(fileName);
-            fs.unlinkSync("./temp/Main.class")
-         } catch (e) {}
-
-        if (error) return reject(error.message); 
-        if (stderr) return reject(stderr);         
-        resolve(stdout);                           
-      });
-
-      process.stdin.write(input);
-      process.stdin.end();
-    }
-})}
-
-
-
-
+import axios from "axios"
 
 export const runCode = async (req,res)=>{
     const {language,code,sampleInput} = req.body
     try{
-    const output = await getOutput(language,code,sampleInput)
-    res.status(200).send({output})
+      console.log(language,code,sampleInput);
+    const output = await axios.post("http://localhost:3001/runcode",{language:language,code:code,sampleInput:sampleInput})
+    res.status(200).send({output:output.data.output})
     }
     catch(error){
         console.log(error)
-        res.status(400).send({error})
+        res.status(400).send({error:error.message})
     }
 
 }
 
 export const submitCode = async (req,res)=>{
+  try{
   const {code,language,id} = req.body
-  const inputFile = await getFromS3("inputFile",id);
-  const outputFile = await getFromS3("outputFile",id);
-  const inputContent = await inputFile.Body.transformToString();
-  const outputContent = await outputFile.Body.transformToString();
-  const output = await getOutput(language,code,inputContent)
-  if(output == outputContent){
+  console.log("entereds")
+  const output = await axios.post("http://localhost:3001/submitcode",{code:code,language:language,id:id})
+  console.log(output)
+  if(output.data.result == "accepted"){
     res.status(200).send({"result":"accepted"})
   }
   else{
     res.status(200).send({"result":"wrong"})
+  }}
+  catch(error){
+    console.log("Error in submitting code ", error.message)
   }
 }

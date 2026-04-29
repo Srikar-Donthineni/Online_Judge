@@ -1,27 +1,41 @@
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./CodeExecute.css";
+import { useSelector } from "react-redux";
 
 const CodeExecute = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const problem = location.state?location.state.problem:null;
+  const {id} = useParams();
   const [language, setLanguage] = useState("python");
+  const [problem,setproblem] = useState(null);
+  const [isloading,setisloading] = useState(true);
   const [Code,setCode] = useState({
     python: `print("Hello World!")`,
     java: `class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
     cpp: `#include <iostream>\nusing namespace std;\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}`,
     javascript: `console.log("Hello, World!");`,
   });
+  const user = useSelector((state)=>state.auth.user);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(()=>{
     const getProblem = async ()=>{
-    if(!problem)
-      navigate("/login");
-  }
+    const getUrl = `http://localhost:3000/problem/${id}`
+    try{
+      const res = await axios.get(getUrl);
+      setproblem(res.data);
+    }
+    catch(error){
+      setproblem(null);
+      console.log("problem not found");
+    }
+    finally{
+      setisloading(false);
+    }
+    }
   getProblem();
   },[])
 
@@ -53,6 +67,7 @@ const CodeExecute = () => {
   };
 
   const submitCode = async () => {
+    if(user){
     const id = problem?._id;
     const submitUrl = "http://localhost:3000/code/submitcode";
     setIsSubmitting(true);
@@ -65,10 +80,15 @@ const CodeExecute = () => {
       );
       setStatus(res.data.result === "accepted" ? "accepted" : "wrong");
     } catch (error) {
-      console.log(error);
+      console.log("Error in submitting code ")
+      console.log(error.message);
       setStatus("error");
     } finally {
       setIsSubmitting(false);
+    }}
+    else
+    {
+      setShowLoginPopup(true);
     }
   };
 
@@ -76,6 +96,19 @@ const CodeExecute = () => {
     const selected = e.target.value;
     setLanguage(selected);
   };
+
+  if(isloading) {
+  return <div className="ce-not-found">Loading...</div>;
+}
+
+if (!problem) {
+  return (
+    <div className="ce-not-found">
+      <h2>Problem Not Found</h2>
+      <button className="ce-btn run" onClick={() => navigate(-1)}>Go Back</button>
+    </div>
+  );
+}
 
   return ( 
     <div className="ce-page">
@@ -227,6 +260,18 @@ const CodeExecute = () => {
         </div>
 
       </main>
+      {showLoginPopup && (
+  <div className="ce-popup-overlay" onClick={() => setShowLoginPopup(false)}>
+    <div className="ce-popup" onClick={(e) => e.stopPropagation()}>
+      <h2 className="ce-popup-title">Login Required</h2>
+      <p className="ce-popup-message">You need to be logged in to submit your solution.</p>
+      <div className="ce-popup-actions">
+        <button className="ce-btn run" onClick={() => setShowLoginPopup(false)}>Cancel</button>
+        <button className="ce-btn submit" onClick={() => navigate('/login')}>Go to Login</button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

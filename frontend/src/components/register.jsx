@@ -1,6 +1,6 @@
 import "./register.css";
 import axios from "axios";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -32,85 +32,110 @@ const Register = () => {
       setExists(true);
     }
   };
+
   useEffect(() => {
-  setFormdata({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-  });
-  setExists(false);
-}, []);
+    setFormdata({
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+    });
+    setExists(false);
+  }, []);
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h1 className="register-heading">Create account</h1>
-        <p className="register-subheading">Fill in the details to get started</p>
+    <div className="reg-page">
+      {/* Ambient glow blobs */}
+      <div className="reg-glow reg-glow--tl" />
+      <div className="reg-glow reg-glow--br" />
 
-        {exists && (
-          <div className="register-error">
-            User already exists with this email.
+      <div className="reg-card">
+        {/* Top accent bar */}
+        <div className="reg-accent-bar" />
+
+        <div className="reg-body">
+          <div className="reg-brand">
+            <span className="reg-brand-bracket">{"<"}</span>
+            <span className="reg-brand-text">CodeJudge</span>
+            <span className="reg-brand-bracket">{"/>"}</span>
           </div>
-        )}
 
-        <form className="register-form" onSubmit={userRegistration}>
-          <div className="register-row">
-            <div className="register-field">
-              <label className="register-label" htmlFor="firstname">First name</label>
-              <input
-                className="register-input"
-                type="text"
-                id="firstname"
-                placeholder="John"
-                value={formData.firstname}
-                onChange={changeForm}
-              />
+          <h1 className="reg-heading">Create account</h1>
+          <p className="reg-subheading">Fill in the details to get started</p>
+
+          {exists && (
+            <div className="reg-error">
+              <span className="reg-error-icon">!</span>
+              User already exists with this email.
+            </div>
+          )}
+
+          <form className="reg-form" onSubmit={userRegistration}>
+            <div className="reg-row">
+              <div className="reg-field">
+                <label className="reg-label" htmlFor="firstname">First name</label>
+                <input
+                  className="reg-input"
+                  type="text"
+                  id="firstname"
+                  placeholder="John"
+                  value={formData.firstname}
+                  onChange={changeForm}
+                />
+              </div>
+              <div className="reg-field">
+                <label className="reg-label" htmlFor="lastname">Last name</label>
+                <input
+                  className="reg-input"
+                  type="text"
+                  id="lastname"
+                  placeholder="Doe"
+                  value={formData.lastname}
+                  onChange={changeForm}
+                />
+              </div>
             </div>
 
-            <div className="register-field">
-              <label className="register-label" htmlFor="lastname">Last name</label>
-              <input
-                className="register-input"
-                type="text"
-                id="lastname"
-                placeholder="Doe"
-                value={formData.lastname}
-                onChange={changeForm}
-              />
+            <div className="reg-field">
+              <label className="reg-label" htmlFor="email">Email</label>
+              <div className="reg-input-wrapper">
+                <span className="reg-input-icon">@</span>
+                <input
+                  className="reg-input reg-input--icon"
+                  type="email"
+                  id="email"
+                  placeholder="john@example.com"
+                  value={formData.email}
+                  onChange={changeForm}
+                />
+              </div>
             </div>
+
+            <div className="reg-field">
+              <label className="reg-label" htmlFor="password">Password</label>
+              <div className="reg-input-wrapper">
+                <span className="reg-input-icon">⌘</span>
+                <input
+                  className="reg-input reg-input--icon"
+                  type="password"
+                  id="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={changeForm}
+                />
+              </div>
+            </div>
+
+            <button className="reg-submit-btn" type="submit">
+              <span className="reg-submit-btn-text">Create account</span>
+              <span className="reg-submit-btn-arrow">→</span>
+            </button>
+          </form>
+
+          <div className="reg-footer">
+            <p>Already registered?</p>
+            <Link className="reg-footer-link" to="/login">Login</Link>
           </div>
-
-          <div className="register-field">
-            <label className="register-label" htmlFor="email">Email</label>
-            <input
-              className="register-input"
-              type="email"
-              id="email"
-              placeholder="john@example.com"
-              value={formData.email}
-              onChange={changeForm}
-            />
-          </div>
-
-          <div className="register-field">
-            <label className="register-label" htmlFor="password">Password</label>
-            <input
-              className="register-input"
-              type="password"
-              id="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={changeForm}
-            />
-          </div>
-
-          <button className="register-submit-btn" type="submit">Create account</button>
-        </form>
-
-        <div className="register-footer">
-          <p>Already registered?</p>
-          <Link to="/login">Login</Link>
         </div>
       </div>
     </div>

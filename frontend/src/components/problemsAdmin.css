@@ -1,15 +1,187 @@
-.cn-create-btn {
-  background: #7F77DD;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-bottom: 1.25rem;
+/* ProblemAdmin.css — dark terminal aesthetic */
+
+/* Shares CSS variables from Problems.css — load that globally */
+
+/* ── Page shell ── */
+.admin-page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  padding: 0 0 6rem;
 }
 
-.cn-create-btn:hover {
-  background: #534AB7;
+/* ── Top bar ── */
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.admin-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.admin-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--bg);
+  background: var(--accent2);
+  padding: 0.2rem 0.6rem;
+  border-radius: 3px;
+}
+
+.admin-title {
+  font-family: var(--display);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ── Create button ── */
+.admin-create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 0 0 0 rgba(95, 255, 176, 0.3);
+}
+
+.admin-create-btn:hover {
+  background: #7affca;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(95, 255, 176, 0.25);
+}
+
+.admin-create-btn:active {
+  transform: translateY(0);
+}
+
+.admin-create-btn-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* ── Stats strip ── */
+.admin-stats-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 1rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(17, 21, 32, 0.6);
+  overflow-x: auto;
+}
+
+.admin-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 2rem 0 0;
+}
+
+.admin-stat-value {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.admin-stat-value--green  { color: var(--accent); }
+.admin-stat-value--yellow { color: #f9e2af; }
+.admin-stat-value--red    { color: var(--danger); }
+
+.admin-stat-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.admin-stat-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+  margin-right: 2rem;
+  flex-shrink: 0;
+}
+
+/* ── Search wrapper ── */
+.admin-search-wrapper {
+  max-width: 700px;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+}
+
+/* ── Grid ── */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+}
+
+.admin-card-wrapper {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: adminSlideUp 0.35s ease forwards;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.admin-card-wrapper--deleting {
+  opacity: 0.35;
+  pointer-events: none;
+  transform: scale(0.96);
+}
+
+@keyframes adminSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .admin-topbar {
+    padding: 1.25rem 1rem;
+  }
+  .admin-stats-strip {
+    padding: 0.75rem 1rem;
+    gap: 0;
+  }
+  .admin-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+  .admin-search-wrapper {
+    padding: 0 1rem;
+  }
 }

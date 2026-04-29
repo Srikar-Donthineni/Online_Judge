@@ -1,91 +1,254 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* login.css — dark terminal aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;800&display=swap');
+
+/* ── Root tokens (mirror Problems.css — remove if already global) ── */
+:root {
+  --bg:      #0b0e14;
+  --surface: #111520;
+  --border:  #1e2535;
+  --accent:  #5fffb0;
+  --accent2: #4cc9ff;
+  --text:    #cdd6f4;
+  --muted:   #565f89;
+  --danger:  #f38ba8;
+  --mono:    'JetBrains Mono', monospace;
+  --display: 'Syne', sans-serif;
 }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: #0f0f13;
-  font-family: sans-serif;
-  color: #e8e8f0;
+  background: var(--bg);
+  font-family: var(--mono);
+  color: var(--text);
 }
 
-.login-container {
+/* ── Page shell ── */
+.lgn-page {
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 1rem;
 }
 
-.login-card {
-  background: #1a1a24;
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 2.5rem 2rem;
+/* Ambient glow blobs */
+.lgn-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(90px);
+  opacity: 0.12;
+}
+
+.lgn-glow--tl {
+  width: 340px;
+  height: 340px;
+  background: var(--accent2);
+  top: -80px;
+  left: -100px;
+}
+
+.lgn-glow--br {
+  width: 300px;
+  height: 300px;
+  background: var(--accent);
+  bottom: -70px;
+  right: -70px;
+}
+
+/* ── Card ── */
+.lgn-card {
+  position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  animation: lgn-cardIn 0.4s ease;
 }
 
-.login-heading {
-  font-size: 22px;
-  font-weight: 500;
-  color: #e8e8f0;
-  margin-bottom: 0.4rem;
+@keyframes lgn-cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.login-subheading {
-  font-size: 13px;
-  color: #666680;
-  margin-bottom: 1.75rem;
+/* Top gradient bar — accent2→accent (reversed vs register for variety) */
+.lgn-accent-bar {
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
 }
 
-.login-form {
+.lgn-body {
+  padding: 2rem 2rem 1.75rem;
+}
+
+/* ── Brand ── */
+.lgn-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
+
+.lgn-brand-bracket {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.lgn-brand-text {
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* ── Headings ── */
+.lgn-heading {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.3rem;
+}
+
+.lgn-subheading {
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Form ── */
+.lgn-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.login-field {
+.lgn-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
-.login-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #9999b3;
+.lgn-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.login-input {
-  background: #12121a;
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 14px;
-  color: #e8e8f0;
+/* Input wrapper */
+.lgn-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lgn-input-icon {
+  position: absolute;
+  left: 0.85rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  pointer-events: none;
+  user-select: none;
+}
+
+.lgn-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  font-family: var(--mono);
+  color: var(--text);
   outline: none;
-  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.login-input:focus {
-  border-color: #7F77DD;
-  box-shadow: 0 0 0 3px rgba(127, 119, 221, 0.15);
+.lgn-input--icon {
+  padding-left: 2.2rem;
 }
 
-.login-submit-btn {
-  background: #7F77DD;
-  color: #ffffff;
+.lgn-input::placeholder {
+  color: #2e3352;
+}
+
+.lgn-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(95, 255, 176, 0.08);
+}
+
+/* ── Submit button ── */
+.lgn-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--accent);
+  color: var(--bg);
   border: none;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 7px;
+  padding: 0.7rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 
-.login-submit-btn:hover {
-  background: #534AB7;
+.lgn-submit-btn:hover {
+  background: #7affca;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(95, 255, 176, 0.2);
+}
+
+.lgn-submit-btn:active {
+  transform: translateY(0);
+}
+
+.lgn-submit-btn-arrow {
+  transition: transform 0.2s;
+}
+
+.lgn-submit-btn:hover .lgn-submit-btn-arrow {
+  transform: translateX(3px);
+}
+
+/* ── Footer ── */
+.lgn-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.lgn-footer-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: color 0.15s;
+}
+
+.lgn-footer-link:hover {
+  color: #7affca;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

@@ -63,3 +63,17 @@ export const Login = async (req,res)=>{
         }
     }
 }
+
+export const getUser = (req,res)=>{
+    try{
+        const user = jwt.decode(req.cookies.token);
+        user.password = null;
+        res.status(200).json(user)
+    }
+    catch(error){
+        console.log("invalid cookie for getting the user ",error);
+        res.status(400).send({
+            message:"Invalid user"
+        })
+    }
+}

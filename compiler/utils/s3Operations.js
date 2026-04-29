@@ -28,7 +28,7 @@ const client = new S3Client({
         accessKeyId : process.env.AWS_ACCESS_KEY,
         secretAccessKey : process.env.AWS_SECRET_KEY
     }
-});
+});;
 
 const deleteParams = {
   Bucket: "probleminputfiles",
@@ -36,13 +36,7 @@ const deleteParams = {
 };
 
 try {
-  const client = new S3Client({
-    region : "ap-south-1",
-    credentials : {
-        accessKeyId : process.env.AWS_ACCESS_KEY,
-        secretAccessKey : process.env.AWS_SECRET_KEY
-    }
-});
+  const response = await client.send(new DeleteObjectCommand(deleteParams));
   console.log("Success", response);
 } catch (err) {
   console.error("Error", err);

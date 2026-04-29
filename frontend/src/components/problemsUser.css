@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;800&display=swap');
+
+/* ── Root tokens ── */
+:root {
+  --bg:        #0b0e14;
+  --surface:   #111520;
+  --border:    #1e2535;
+  --accent:    #5fffb0;
+  --accent2:   #4cc9ff;
+  --text:      #cdd6f4;
+  --muted:     #565f89;
+  --danger:    #f38ba8;
+  --mono:      'JetBrains Mono', monospace;
+  --display:   'Syne', sans-serif;
+}
+
+/* ── Page shell ── */
+.problems-page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  padding: 0 0 6rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Header ── */
+.problems-header {
+  position: relative;
+  padding: 4.5rem 2rem 2.5rem;
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.problems-header-glow {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 520px;
+  height: 220px;
+  background: radial-gradient(ellipse, rgba(95, 255, 176, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.problems-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 0.5rem;
+}
+
+.problems-title-prefix,
+.problems-title-suffix {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+.problems-subtitle {
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── Search wrapper ── */
+.problems-search-wrapper {
+  max-width: 700px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+/* ── Count bar ── */
+.problems-count-bar {
+  max-width: 1200px;
+  margin: 2rem auto 1rem;
+  padding: 0 2rem;
+}
+
+.problems-count-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.problems-count-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Card grid ── */
+.problems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.problems-card-wrapper {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: slideUp 0.35s ease forwards;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .problems-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+  .problems-header {
+    padding: 3rem 1.25rem 2rem;
+  }
+}
+
+.problems-nav {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  display: flex;
+  gap: 0.75rem;
+  z-index: 10;
+}
+
+.problems-login-btn {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.problems-login-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
