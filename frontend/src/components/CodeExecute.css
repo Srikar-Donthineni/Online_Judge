@@ -361,3 +361,32 @@
   .ce-io-row { flex-direction: column; }
   .ce-io-box:first-child { border-right: none; border-bottom: 1px solid var(--border); }
 }
+
+.ce-btn.ai {
+  background: linear-gradient(135deg, rgba(95,255,176,0.1), rgba(76,201,255,0.1));
+  color: var(--accent2);
+  border: 1px solid var(--accent2);
+}
+
+.ce-btn.ai:hover:not(:disabled) {
+  background: var(--accent2);
+  color: var(--bg);
+}
+
+.ce-btn-disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+}
+
+.ai-dot {
+  background: var(--accent2);
+  box-shadow: 0 0 6px var(--accent2);
+}
+
+.ce-ai-review {
+  color: var(--accent2);
+  line-height: 1.7;
+  font-size: 0.82rem;
+  resize: none;
+  white-space: pre-wrap;
+}

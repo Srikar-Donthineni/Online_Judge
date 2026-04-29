@@ -3,9 +3,11 @@ import ProblemCard from "./problemAdminCard";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Search from "./searchBar";
+import { useSelector } from 'react-redux';
 import "./problemsAdmin.css";
 
 const ProblemAdmin = () => {
+  const user = useSelector((state)=>state.auth.user)
   const [allProblems, setallProblems] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
@@ -44,6 +46,23 @@ const ProblemAdmin = () => {
     };
     getProblems();
   }, []);
+
+  if (!user) {
+  return (
+    <div className="admin-locked-page">
+      <div className="admin-locked-glow" />
+      <div className="admin-locked-box">
+        <span className="admin-locked-icon">⚿</span>
+        <h2 className="admin-locked-title">Access Restricted</h2>
+        <p className="admin-locked-message">You need to be logged in to access the Admin Panel.</p>
+        <div className="admin-locked-actions">
+          <button className="admin-locked-btn primary" onClick={() => navigate('/login')}>Go to Login</button>
+          <button className="admin-locked-btn secondary" onClick={() => navigate('/')}>Go Back</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="admin-page">

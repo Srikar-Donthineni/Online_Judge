@@ -12,6 +12,8 @@ const CodeExecute = () => {
   const [language, setLanguage] = useState("python");
   const [problem,setproblem] = useState(null);
   const [isloading,setisloading] = useState(true);
+  const [aiReview, setAiReview] = useState("");
+  const [isReviewing, setIsReviewing] = useState(false);
   const [Code,setCode] = useState({
     python: `print("Hello World!")`,
     java: `class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
@@ -73,9 +75,10 @@ const CodeExecute = () => {
     setIsSubmitting(true);
     setStatus(null);
     try {
+      console.log(problem.problemStatement)
       const res = await axios.post(
         submitUrl,
-        { code: Code[language], language, id },
+        { code: Code[language], language, id , problemStatement:problem.problemStatement },
         { withCredentials: true }
       );
       setStatus(res.data.result === "accepted" ? "accepted" : "wrong");
@@ -91,6 +94,24 @@ const CodeExecute = () => {
       setShowLoginPopup(true);
     }
   };
+
+const codeReview = async () => {
+  if (!user) {
+    setShowLoginPopup(true);
+    return;
+  }
+  try {
+    setIsReviewing(true);
+    setAiReview("");
+    const codeReviewUrl = "http://localhost:3000/ai/codeReview"; 
+    const res = await axios.post(codeReviewUrl, { language, code: Code[language], problemStatement: problem.problemStatement }, { withCredentials: true });
+    setAiReview(res.data.review);
+  } catch (error) {
+    setAiReview("Failed to get review. Please try again.");
+  } finally {
+    setIsReviewing(false);
+  }
+};
 
   const handleLanguageChange = (e) => {
     const selected = e.target.value;
@@ -160,6 +181,22 @@ if (!problem) {
               rows={4}
             />
           </div>
+          {aiReview && (
+  <>
+    <div className="ce-divider" />
+    <div className="ce-section">
+      <span className="ce-section-label">
+        <span className="ce-label-dot ai-dot" /> AI Code Review
+      </span>
+      <textarea
+        className="ce-sample-box ce-ai-review"
+        value={aiReview}
+        readOnly
+        rows={8}
+      />
+    </div>
+  </>
+)}
 
         </div>
       </aside>
@@ -256,6 +293,14 @@ if (!problem) {
             <button className="ce-btn submit" onClick={submitCode} disabled={isSubmitting}>
               {isSubmitting ? <span className="ce-spinner" /> : "⬆ Submit"}
             </button>
+            <button 
+  className={`ce-btn ai ${!user ? "ce-btn-disabled" : ""}`} 
+  onClick={codeReview} 
+  disabled={isReviewing || !user}
+  title={!user ? "Login to use AI Review" : ""}
+>
+  {isReviewing ? <span className="ce-spinner" /> : "✦ AI Review"}
+</button>
           </div>
         </div>
 
