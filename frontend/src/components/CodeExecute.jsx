@@ -67,7 +67,7 @@ const CodeExecute = () => {
   useEffect(() => {
     const getProblem = async () => {
       try {
-        const res = await axios.get(`https://backend.srikarweb.com:3000/problem/${slug}`);
+        const res = await axios.get(`https://backend.srikarweb.com/problem/${slug}`);
         setproblem(res.data);
         setInput(res.data?.sampleInput || "");
       } catch { setproblem(null); }
@@ -82,7 +82,7 @@ const CodeExecute = () => {
     setActiveTab("io");           // switch to I/O tab
     try {
       const res = await axios.post(
-        "https://backend.srikarweb.com:3000/code/runcode",
+        "https://backend.srikarweb.com/code/runcode",
         { language, code: Code[language], sampleInput: Input },
         { withCredentials: true }
       );
@@ -109,7 +109,7 @@ const CodeExecute = () => {
     setActiveTab("tests");        // switch to Test Cases tab
     try {
       const res = await axios.post(
-        "https://backend.srikarweb.com:3000/code/submitcode",
+        "https://backend.srikarweb.com/code/submitcode",
         { code: Code[language], language, slug, problemStatement: problem.problemStatement },
         { withCredentials: true }
       );
@@ -129,7 +129,7 @@ setStatus(fail.length === 0 && timedout.length === 0 ? "accepted" : "wrong");
     setActiveTab("ai");           // switch to AI Review tab
     try {
       const res = await axios.post(
-        "https://backend.srikarweb.com:3000/ai/codeReview",
+        "https://backend.srikarweb.com/ai/codeReview",
         { language, code: Code[language], problemStatement: problem.problemStatement },
         { withCredentials: true }
       );
@@ -143,7 +143,7 @@ setStatus(fail.length === 0 && timedout.length === 0 ? "accepted" : "wrong");
   const logout = async () => {
     setIsLoggingOut(true);
     try {
-      await axios.post("https://backend.srikarweb.com:3000/auth/logout", {}, { withCredentials: true });
+      await axios.post("https://backend.srikarweb.com/auth/logout", {}, { withCredentials: true });
       dispatch(clearUser());
       navigate("/login");
     } catch (err) { console.log("Error while logging out", err); }

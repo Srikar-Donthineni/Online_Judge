@@ -15,7 +15,7 @@ const Problems = () => {
 
   useEffect(() => {
     const getProblems = async () => {
-      const problemsUrl = "https://backend.srikarweb.com:3000/problem";
+      const problemsUrl = "https://backend.srikarweb.com/problem";
       const res = await axios.get(problemsUrl, { withCredentials: true });
       setProblemsArray(res.data);
     };
@@ -28,7 +28,7 @@ const Problems = () => {
 
 const logout = async () => {
     try {
-      const logoutUrl = "https://backend.srikarweb.com:3000/auth/logout"; // ✅ Fix 2: defined logoutUrl
+      const logoutUrl = "https://backend.srikarweb.com/auth/logout"; // ✅ Fix 2: defined logoutUrl
       await axios.post(logoutUrl, {}, { withCredentials: true }); // ✅ Fix 3: was using problemsUrl
       dispatch(clearUser()); // ✅ Fix 4: was dispatchEvent(clearUser())
       navigate("/login");
