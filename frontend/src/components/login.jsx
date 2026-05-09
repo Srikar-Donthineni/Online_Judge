@@ -22,7 +22,7 @@ const Login = () => {
   const submitLogin = async (e) => {
     e.preventDefault();
     try{
-    const loginUrl = "http://localhost:3000/auth/login";
+    const loginUrl = "https://backend.srikarweb.com:3000/auth/login";
     const res = await axios.post(loginUrl, loginForm, { withCredentials: true });
     const user = res.data.user;
     setLoginform({ email: "", password: "" });

@@ -18,7 +18,7 @@ function App() {
   useEffect(()=>{
     const getUser = async ()=>{
       try{
-      const getUrl = "http://localhost:3000/auth/user"
+      const getUrl = "https://backend.srikarweb.com:3000/auth/user"
       const user = await axios.get(getUrl,{withCredentials:true})
       dispatch(setUser(user.data));
       }

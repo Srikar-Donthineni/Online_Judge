@@ -19,7 +19,7 @@ const ProblemAdmin = () => {
   const handleDelete = async (slug) => {
     setDeletingId(slug);
     try {
-      const deleteUrl = `http://localhost:3000/problem/${id}`;
+      const deleteUrl = `https://backend.srikarweb.com:3000/problem/${id}`;
       const res = await axios.delete(deleteUrl, { withCredentials: true });
       if (res.status === 200) {
         setallProblems((prev) => prev.filter((item) => item._id !== id));
@@ -39,7 +39,7 @@ const ProblemAdmin = () => {
 
   useEffect(() => {
     const getProblems = async () => {
-      const problemsUrl = "http://localhost:3000/problem";
+      const problemsUrl = "https://backend.srikarweb.com:3000/problem";
       const res = await axios.get(problemsUrl, { withCredentials: true });
       console.log(res.data);
       setallProblems(res.data);

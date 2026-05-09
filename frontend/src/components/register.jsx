@@ -24,7 +24,7 @@ const Register = () => {
   const userRegistration = async (e) => {
     try {
       e.preventDefault();
-      const registerUrl = "http://localhost:3000/auth/register";
+      const registerUrl = "https://backend.srikarweb.com:3000/auth/register";
       await axios.post(registerUrl, formData);
       navigate("/login");
     } catch (error) {

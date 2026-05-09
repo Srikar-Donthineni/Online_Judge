@@ -52,7 +52,7 @@ const CreateNew = () => {
   const createProblem = async (e) => {
     e.preventDefault();
 
-    const url = editMode ? `http://localhost:3000/problem/${problem.slug}`:"http://localhost:3000/problem"
+    const url = editMode ? `https://backend.srikarweb.com:3000/problem/${problem.slug}`:"https://backend.srikarweb.com:3000/problem"
 
     const data = new FormData();
     data.append("title", formData.title);

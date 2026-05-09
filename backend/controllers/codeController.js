@@ -11,7 +11,7 @@ dotenv.config();
 export const runCode = async (req,res)=>{
     const {language,code,sampleInput} = req.body
     try{
-    const output = await axios.post("http://localhost:8000/runcode",{language:language,code:code,sampleInput:sampleInput})
+    const output = await axios.post("https://backend.srikarweb.com:8000/runcode",{language:language,code:code,sampleInput:sampleInput})
     res.status(200).send({output:output.data.output})
     }
     catch(error){
@@ -23,7 +23,7 @@ export const runCode = async (req,res)=>{
 export const submitCode = async (req,res)=>{
   try{
   const {code,language,slug,problemStatement} = req.body
-  const output = await axios.post("http://localhost:8000/submitcode",{code:code,language:language,slug:slug})
+  const output = await axios.post("https://backend.srikarweb.com:8000/submitcode",{code:code,language:language,slug:slug})
   res.status(200).json({
     success:output.data.success,
     fail:output.data.fail,
