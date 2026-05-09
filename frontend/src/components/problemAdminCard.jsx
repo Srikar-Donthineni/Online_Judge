@@ -12,14 +12,14 @@ const ProblemCard = ({ problem, onClick, onDelete, onEdit }) => {
       {showModal && (
         <ConfirmModal
           onConfirm={() => {
-            onDelete(problem._id);
+            onDelete(problem.slug);
             setShowModal(false);
           }}
           onCancel={() => setShowModal(false)}
         />
       )}
 
-      <div className="acard-item" onClick={() => onClick(problem._id)}>
+      <div className="acard-item" onClick={() => onClick(problem.slug)}>
         {/* Top accent bar */}
         <div className="acard-accent-bar" />
 

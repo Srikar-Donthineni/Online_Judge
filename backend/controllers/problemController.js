@@ -2,9 +2,16 @@ import problemModel from "../models/Problem.js";
 import uploadToS3,{deleteFromS3} from "../utils/s3Operations.js";
 
 export const problemCreate = async (req,res)=>{
+    const slug = req.body.title
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")   
+      .replace(/\s+/g, "-")            
+      .replace(/-+/g, "-");  
     try {
       const prob = new problemModel({
         title : req.body.title,
+        slug,
         problemStatement : req.body.problemStatement,
         sampleInput : req.body.sampleInput,
         sampleOutput : req.body.sampleOutput,
@@ -12,9 +19,8 @@ export const problemCreate = async (req,res)=>{
         outputFileName : req.files.outputFile[0].originalname
       })
       await prob.save();
-      const problemId = prob._id.toString();
-      uploadToS3(req.files.inputFile[0],problemId)
-      uploadToS3(req.files.outputFile[0],problemId)
+      uploadToS3(req.files.inputFile[0],slug)
+      uploadToS3(req.files.outputFile[0],slug)
      res.status(200).json(prob);
       } catch (error) {
          console.log("error in problem creation",error);
@@ -25,28 +31,26 @@ export const problemCreate = async (req,res)=>{
 
 export const problemDelete = async (req,res)=>{ 
     try {
-        const problemId = req.params.id;
-        const problem = await problemModel.findByIdAndDelete(problemId);
+        const slug = req.params.slug;
+        const problem = await problemModel.findOne({slug});
         if(!problem){
             res.status(400).send("problem doesn't exists");
         }
         else{
-            deleteFromS3("inputFile",problemId)
-            deleteFromS3("outputFile",problemId)
+            deleteFromS3("inputFile",slug)
+            deleteFromS3("outputFile",slug)
             res.status(200).send("problem deleted successfully")
         }
     } catch (error) {
-        console.log("error deleting probelm",error);
         res.status(400).send(error);
     }
 }
 
 export const problemPut = async (req,res)=>{
     try {
-        const problemId = req.params.id
-        const problem = await problemModel.findById(problemId)
+        const slug = req.params.slug
+        const problem = await problemModel.findOne({slug})
         if(!problem){
-            console.log("problem doesnt exist");
             res.status(400).send("problem doesnt exists");
         }
         else{
@@ -55,12 +59,11 @@ export const problemPut = async (req,res)=>{
             problem.sampleInput = req.body.sampleInput 
             problem.sampleOutput = req.body.sampleOutput
             await problem.save();
-            console.log(req.files);
             if(req.files && req.files.inputFile){
-                uploadToS3(req.files.inputFile[0],problemId) 
+                uploadToS3(req.files.inputFile[0],slug) 
             }
             if(req.files && req.files.outputFile){
-                uploadToS3(req.files.outputFile[0],problemId)
+                uploadToS3(req.files.outputFile[0],slug)
             }
             res.status(200).json(problem);
         }
@@ -72,13 +75,21 @@ export const problemPut = async (req,res)=>{
 
 export const problemGet = async (req,res)=>{
       try {
-        const problemId = req.params.id;
-        const problem = await problemModel.findById(problemId);
+        const slug = req.params.slug;
+        console.log(req)
+        console.log(slug)
+        const problem = await problemModel.findOne({slug});
         if(!problem){
             res.status(400).send("problem not found")
         }
         else{
-            res.status(200).json(problem);}
+            res.status(200).json({
+                problemStatement : problem.problemStatement,
+                sampleInput : problem.sampleInput,
+                sampleOutput : problem.sampleOutput,
+                title : problem.title,
+                slug:problem.slug
+        });}
       } catch (error) {
         console.log("error getting the problem",error);
         res.status(400).send(error)
@@ -88,7 +99,15 @@ export const problemGet = async (req,res)=>{
 export const problemGetAll = async (req,res)=>{
     try {
         const problems = await problemModel.find({});
-        res.status(200).json(problems);
+        res.status(200).json(
+  problems.map((problem) => ({
+    problemStatement: problem.problemStatement,
+    sampleInput: problem.sampleInput,
+    sampleOutput: problem.sampleOutput,
+    title: problem.title,
+    slug: problem.slug,
+  }))
+);
     } catch (error) {
         console.log("error getting ",error)
         res.status(400).send(error);

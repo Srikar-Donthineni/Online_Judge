@@ -45,7 +45,7 @@ export const Login = async (req,res)=>{
         const user = existUseremail.toObject();
         if(await bcrypt.compare(req.body.password,user.password)){
             const jwtSecretKey = process.env.JWT_SECRET_KEY;
-            const token = jwt.sign({email:user.email,role:user.role}, jwtSecretKey);
+            const token = jwt.sign({email:user.email,role:user.role}, jwtSecretKey,{expiresIn:'2h'});
             user.password= null;
               res.cookie('token', token, {
                 httpOnly: true,   
@@ -61,6 +61,17 @@ export const Login = async (req,res)=>{
         else{
             return res.status(400).send("Incorrect password");
         }
+    }
+}
+
+export const Logout = (req,res)=>{
+    try{
+        res.clearCookie('token');
+        res.status(200).json({message:"Cleared Successfully"})
+    }
+    catch(error){
+        console.log("error clearing cookie");
+        res.status(400).send("unable to clear cookie")
     }
 }
 

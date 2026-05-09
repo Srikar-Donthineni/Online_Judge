@@ -10,7 +10,8 @@ const userSchema = new Schema({
         type:String,
         enum:["user","admin"],
         default:"user"
-    }
+    },
+    airequests : {type:Number,default:0}
 }
 );
 

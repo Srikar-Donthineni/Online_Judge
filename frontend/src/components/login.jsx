@@ -9,6 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
   const loginform = { email: "", password: "" };
   const [loginForm, setLoginform] = useState(loginform);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
   const dispatch = useDispatch();
 
   const userLogin = (e) => {
@@ -32,7 +33,8 @@ const Login = () => {
       navigate("/");
     }}
     catch(error){
-      console.log("Incorrect username or password",error);
+      setShowErrorPopup(true);
+      console.log("Incorrect email or password",error);
     }
   };
 
@@ -99,6 +101,16 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {showErrorPopup && (
+  <div className="lgn-popup-overlay" onClick={() => setShowErrorPopup(false)}>
+    <div className="lgn-popup" onClick={(e) => e.stopPropagation()}>
+      <div className="lgn-popup-icon">✗</div>
+      <h2 className="lgn-popup-title">Login Failed</h2>
+      <p className="lgn-popup-message">Incorrect email or password. Please try again.</p>
+      <button className="lgn-popup-btn" onClick={() => setShowErrorPopup(false)}>Try Again</button>
+    </div>
+  </div>
+)}
     </div>
   );
 };

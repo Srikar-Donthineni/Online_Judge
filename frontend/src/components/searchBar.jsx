@@ -72,9 +72,9 @@ const Search = ({ problems, moveToProblem }) => {
           </p>
           {matchedproblems.slice(0, 3).map((problem) => (
             <div
-              key={problem._id}
+              key={problem.slug}
               className="search-result-item"
-              onMouseDown={() => moveToProblem(problem._id)}
+              onMouseDown={() => moveToProblem(problem.slug)}
             >
               <span className="search-result-arrow">→</span>
               <span className="search-result-title">{problem.title}</span>

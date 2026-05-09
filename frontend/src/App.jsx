@@ -40,7 +40,7 @@ function App() {
         <Route path="/" element={<Problems/>}/>
         <Route path="/problemsAdmin" element={<ProblemAdmin/>}/>
         <Route path="/createNew" element={<CreateNew/>}/>
-        <Route path="/runCode/:id" element={<CodeExecute/>}/>
+        <Route path="/runCode/:slug" element={<CodeExecute/>}/>
       </Routes>
     </BrowserRouter>
     </>

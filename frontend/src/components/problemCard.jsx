@@ -30,7 +30,6 @@ const ProblemCard = ({ problem, onClick }) => {
           >
             {expanded ? "Show less ↑" : "Show more ↓"}
           </button>
-          <span className="ucard-solve">Solve →</span>
         </div>
       </div>
 

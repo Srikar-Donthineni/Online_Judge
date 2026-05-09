@@ -24,11 +24,21 @@ const getOutput = (language,code,input)=>{
 
         if (error) return reject(error.message); 
         if (stderr) return reject(stderr);         
-        resolve(stdout);                           
+        resolve({stdout,timedout:false});                           
       });
-
+      let timedout = false;
+      const timer = setTimeout(() => {
+        timedout = true;
+      process.kill('SIGKILL');
+      try { fs.unlinkSync(fileName); } catch (e) {console.log("error unlinking file")}
+      resolve({timedout:true});
+    }, 2000);
+    process.on('exit',()=>{
+      clearTimeout(timer);
+    })
       process.stdin.write(input);
       process.stdin.end();
+
     }
     if(language == "cpp"){
       const fileName = `./temp/${id}.cpp`;
@@ -39,9 +49,18 @@ const getOutput = (language,code,input)=>{
 
         if (error) return reject(error.message); 
         if (stderr) return reject(stderr);         
-        resolve(stdout);                           
+        resolve({stdout,timedout:false});                            
       });
-
+      let timedout = false;
+      const timer = setTimeout(() => {
+        timedout = true;
+      process.kill('SIGKILL');
+      try { fs.unlinkSync(fileName); } catch (e) {console.log("error unlinking file")}
+      resolve({timedout:true});
+    }, 5000);
+    process.on('exit',()=>{
+      clearTimeout(timer);
+    })
       process.stdin.write(input);
       process.stdin.end();
     }
@@ -54,9 +73,18 @@ const getOutput = (language,code,input)=>{
 
         if (error) return reject(error.message); 
         if (stderr) return reject(stderr);         
-        resolve(stdout);                           
+        resolve({stdout,timedout:false});                            
       });
-
+      let timedout = false;
+      const timer = setTimeout(() => {
+        timedout = true;
+      process.kill('SIGKILL');
+      try { fs.unlinkSync(fileName); } catch (e) {console.log("error unlinking file")}
+      resolve({timedout:true});
+    }, 5000);
+    process.on('exit',()=>{
+      clearTimeout(timer);
+    })
       process.stdin.write(input);
       process.stdin.end();
     }
@@ -71,9 +99,18 @@ const getOutput = (language,code,input)=>{
 
         if (error) return reject(error.message); 
         if (stderr) return reject(stderr);         
-        resolve(stdout);                           
+        resolve({stdout,timedout:false});                         
       });
-
+      let timedout = false;
+      const timer = setTimeout(() => {
+        timedout = true;
+      process.kill('SIGKILL');
+      try { fs.unlinkSync(fileName); } catch (e) {console.log("error unlinking file")}
+      resolve({timedout:true});
+    }, 5000);
+    process.on('exit',()=>{
+      clearTimeout(timer);
+    })
       process.stdin.write(input);
       process.stdin.end();
     }
@@ -90,27 +127,42 @@ export const runCode = async (req,res)=>{
     res.status(200).send({output})
     }
     catch(error){
-        console.log(error)
-        res.status(400).send({error})
+        res.status(400).json({error})
     }
 
 }
 
 export const submitCode = async (req,res)=>{
   try{
-    console.log("entered")
-    const {code,language,id} = req.body
-    const inputFile = await getFromS3("inputFile",id);
-    const outputFile = await getFromS3("outputFile",id);
+    const {code,language,slug} = req.body
+    const inputFile = await getFromS3("inputFile",slug);
+    const outputFile = await getFromS3("outputFile",slug);
     const inputContent = await inputFile.Body.transformToString();
     const outputContent = await outputFile.Body.transformToString();
-    const output = await getOutput(language,code,inputContent)
-    if(output == outputContent){
-      res.status(200).send({"result":"accepted"})
+    const inputs = inputContent.split("--input--").map(s=>s.trim()).filter(s=>s.length>0);
+    const outputs = outputContent.split("--output--").map(s=>s.trim()).filter(s=>s.length>0);
+    const success = [];
+    const fail = [];
+    const timedout = [];
+    const total = outputs.length;
+    for(let i=0;i<inputs.length;i++){
+      let out = await getOutput(language,code,inputs[i]);
+      if(out.timedout == true){
+        timedout.push(i)
+      }
+      else if(out.stdout.trim()===outputs[i]){
+        success.push(i);
+      }
+      else{
+        fail.push(i)
+      }
     }
-    else{
-      res.status(200).send({"result":"wrong"})
-    }
+    res.status(200).json({
+      success,
+      fail,
+      timedout,
+      total
+    })
   }
   catch(error){
     console.log("error in submitting code ",error.message)
@@ -121,8 +173,8 @@ const app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
-app.listen(3001,()=>{
-    console.log("Compiler Service is listening on port 3001")
+app.listen(8000,()=>{
+    console.log("Compiler Service is listening on port 8000")
 })
 
 app.post("/runcode",runCode);

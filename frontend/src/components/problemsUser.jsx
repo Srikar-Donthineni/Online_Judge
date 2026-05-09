@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import ProblemCard from "./problemCard";
 import Search from "./searchBar";
 import "./problemsUser.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { clearUser } from "./authSlice";
 
 const Problems = () => {
   const [problemsArray, setProblemsArray] = useState([]);
   const navigate = useNavigate();
-  const user = useSelector((state)=>state.auth.user);
-  console.log("in users problems",user);
+  const dispatch = useDispatch(); // ✅ Fix 1: was missing
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const getProblems = async () => {
@@ -21,8 +22,19 @@ const Problems = () => {
     getProblems();
   }, []);
 
-  const moveToProblem = (id) => {
-    navigate(`/runCode/${id}`);
+  const moveToProblem = (slug) => {
+    navigate(`/runCode/${slug}`);
+  };
+
+const logout = async () => {
+    try {
+      const logoutUrl = "http://localhost:3000/auth/logout"; // ✅ Fix 2: defined logoutUrl
+      await axios.post(logoutUrl, {}, { withCredentials: true }); // ✅ Fix 3: was using problemsUrl
+      dispatch(clearUser()); // ✅ Fix 4: was dispatchEvent(clearUser())
+      navigate("/login");
+    } catch (error) {
+      console.log("Error while logging out", error);
+    }
   };
 
   return (
@@ -30,11 +42,22 @@ const Problems = () => {
       <div className="problems-header">
         <div className="problems-header-glow" />
 
-      { !user && <div className="problems-nav">
-    <button className="problems-login-btn" onClick={() => navigate('/login')}>
-      Login
-    </button>
-  </div> }
+        {/* ✅ Show Login if not logged in, Logout if logged in */}
+        <div className="problems-nav">
+          {user ? (
+              <button className="problems-logout-btn" onClick={logout}>
+                <span className="problems-logout-icon">⏻</span>
+                Logout
+              </button>
+          ) : (
+            <button
+              className="problems-login-btn"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          )}
+        </div>
 
         <h1 className="problems-title">
           <span className="problems-title-prefix">{"<"}</span>
@@ -60,11 +83,11 @@ const Problems = () => {
           <div
             className="problems-card-wrapper"
             style={{ animationDelay: `${idx * 60}ms` }}
-            key={problem._id}
+            key={problem.slug}
           >
             <ProblemCard
               problem={problem}
-              onClick={() => moveToProblem(problem._id)}
+              onClick={() => moveToProblem(problem.slug)}
             />
           </div>
         ))}

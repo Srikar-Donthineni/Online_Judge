@@ -16,8 +16,8 @@ const ProblemAdmin = () => {
     navigate("/createNew", { state: { problem: problem } });
   };
 
-  const handleDelete = async (id) => {
-    setDeletingId(id);
+  const handleDelete = async (slug) => {
+    setDeletingId(slug);
     try {
       const deleteUrl = `http://localhost:3000/problem/${id}`;
       const res = await axios.delete(deleteUrl, { withCredentials: true });
@@ -29,8 +29,8 @@ const ProblemAdmin = () => {
     }
   };
 
-  const moveToProblem = (id) => {
-    navigate(`/runCode/${id}`);
+  const moveToProblem = (slug) => {
+    navigate(`/runCode/${slug}`);
   };
 
   const createNew = () => {
@@ -116,13 +116,13 @@ const ProblemAdmin = () => {
       <div className="admin-grid">
         {allProblems.map((problem, idx) => (
           <div
-            key={problem._id}
-            className={`admin-card-wrapper ${deletingId === problem._id ? "admin-card-wrapper--deleting" : ""}`}
+            key={problem.slug}
+            className={`admin-card-wrapper ${deletingId === problem.slug ? "admin-card-wrapper--deleting" : ""}`}
             style={{ animationDelay: `${idx * 55}ms` }}
           >
             <ProblemCard
               problem={problem}
-              onClick={() => moveToProblem(problem._id)}
+              onClick={() => moveToProblem(problem.slug)}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />

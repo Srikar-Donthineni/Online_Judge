@@ -69,6 +69,103 @@
   margin: 0;
 }
 
+/* ── Nav ── */
+.problems-nav {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 10;
+}
+
+/* ── User info + logout grouped ── */
+.problems-nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.4rem 0.4rem 1.1rem;
+  backdrop-filter: blur(10px);
+}
+
+/* ── Greeting ── */
+.problems-nav-greeting {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.problems-nav-greeting strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ── Login button ── */
+.problems-login-btn {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.problems-login-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  transform: scale(1.03);
+}
+
+.problems-login-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Logout button ── */
+.problems-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: rgba(243, 139, 168, 0.1);
+  color: var(--danger);
+  border: 1px solid rgba(243, 139, 168, 0.25);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.problems-logout-btn:hover {
+  background: rgba(243, 139, 168, 0.2);
+  border-color: rgba(243, 139, 168, 0.5);
+  transform: scale(1.03);
+}
+
+.problems-logout-btn:active {
+  transform: scale(0.97);
+}
+
+.problems-logout-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
 /* ── Search wrapper ── */
 .problems-search-wrapper {
   max-width: 700px;
@@ -137,36 +234,22 @@
     grid-template-columns: 1fr;
     padding: 0 1rem;
   }
+
   .problems-header {
     padding: 3rem 1.25rem 2rem;
   }
-}
 
-.problems-nav {
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
-  display: flex;
-  gap: 0.75rem;
-  z-index: 10;
-}
+  .problems-nav {
+    top: 1rem;
+    right: 1rem;
+  }
 
-.problems-login-btn {
-  font-family: var(--mono);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: transparent;
-  border: 1px solid var(--accent);
-  padding: 0.45rem 1.1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
+  /* Hide email on small screens, show only logout */
+  .problems-nav-greeting {
+    display: none;
+  }
 
-.problems-login-btn:hover {
-  background: var(--accent);
-  color: var(--bg);
+  .problems-nav-user {
+    padding: 0.35rem;
+  }
 }
